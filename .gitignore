@@ -1,9 +1,32 @@
+# Visual Studio
 .vs/
-bin/
-obj/
 *.user
 *.suo
-*.cache
-*.log
+*.userosscache
+*.sln.docstates
 
+# Build results
+bin/
+obj/
+Debug/
+Release/
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+
+# ASP.NET / Web projects
+App_Data/
+*.log
+*.vspscc
+*.vssscc
+
+# Rider
+.idea/
+
+# Others
+*.DS_Store
+*.cache
+*.pdb
 
