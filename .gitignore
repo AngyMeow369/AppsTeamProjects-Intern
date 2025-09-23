@@ -3,7 +3,10 @@ bin/
 obj/
 *.user
 *.suo
+<<<<<<< HEAD
 *.cache
 *.log
 
+=======
+>>>>>>> 274f32e3eeb008ecd9422178d81344ad37498726
 
