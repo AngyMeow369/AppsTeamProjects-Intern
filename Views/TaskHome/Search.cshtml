@@ -1,0 +1,52 @@
+@model IEnumerable<TaskLoggerV1.Models.TaskModel>
+
+@{
+    ViewBag.Title = "Search Tasks";
+}
+
+<h2>Search Tasks by Date</h2>
+
+@using (Html.BeginForm("Search", "TaskHome", FormMethod.Get))
+{
+    <div class="form-group">
+        <label for="date">Select Date:</label>
+        <input type="date" name="date" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+}
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Task Date</th>
+                <th>Hours Logged</th>
+                <th>Completed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Title</td>
+                    <td>@task.Description</td>
+                    <td>@task.TaskDate.ToString("yyyy-MM-dd")</td>
+                    <td>@task.HoursLogged</td>
+                    <td>@(task.IsCompleted ? "Yes" : "No")</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = task.Id }, new { @class = "btn btn-sm btn-primary" })
+                        @Html.ActionLink("Delete", "Delete", new { id = task.Id }, new { @class = "btn btn-sm btn-danger" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="mt-3">No tasks found.</p>
+}
