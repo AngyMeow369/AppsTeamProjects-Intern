@@ -25,6 +25,7 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
+                @*<th>Id</th>*@
                 <th>Title</th>
                 <th>Description</th>
                 <th>Task Date</th>
@@ -37,6 +38,7 @@
             @foreach (var task in Model)
             {
                 <tr>
+                    @*<td>@task.Id</td>*@
                     <td>@task.Title</td>
                     <td>@task.Description</td>
                     <td>@task.TaskDate.ToString("yyyy-MM-dd")</td>

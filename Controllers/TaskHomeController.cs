@@ -14,9 +14,9 @@ namespace TaskLoggerV1.Controllers
 
         public TaskHomeController()
         {
-            var cs = ConfigurationManager.ConnectionStrings["TaskDbConnection"];
+            var cs = ConfigurationManager.ConnectionStrings["TaskLoggerDBConnectionString"];
             if (cs == null)
-                throw new Exception("Connection string 'TaskDbConnection' not found in Web.config");
+                throw new Exception("Connection string 'TaskLoggerDBConnectionString' not found in Web.config");
 
             connStr = cs.ConnectionString;
         }
