@@ -1,43 +1,54 @@
 @model TaskLoggerV1.Models.TaskModel
 
-<div id="edit-task-container">
-    @using (Html.BeginForm("Edit", "TaskHome", FormMethod.Post, new { id = "editTaskForm" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.Id)
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("Edit", "TaskHome", FormMethod.Post, new { id = "editTaskForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Id)
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Title)
-            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Title)
-        </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskLabel">Edit Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Description)
-            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 3 })
-            @Html.ValidationMessageFor(m => m.Description)
-        </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.TaskDate)
-            @Html.TextBoxFor(m => m.TaskDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-            @Html.ValidationMessageFor(m => m.TaskDate)
-        </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 3 })
+                        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.HoursLogged)
-            @Html.TextBoxFor(m => m.HoursLogged, new { @class = "form-control", type = "number", step = "0.1" })
-            @Html.ValidationMessageFor(m => m.HoursLogged)
-        </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.TaskDate, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.TaskDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                        @Html.ValidationMessageFor(m => m.TaskDate, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-check">
-            @Html.CheckBoxFor(m => m.IsCompleted, new { @class = "form-check-input" })
-            @Html.LabelFor(m => m.IsCompleted, new { @class = "form-check-label" })
-        </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.HoursLogged, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.HoursLogged, new { @class = "form-control", type = "number", step = "0.1" })
+                        @Html.ValidationMessageFor(m => m.HoursLogged, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="mt-2">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <div class="form-check mb-3">
+                        @Html.CheckBoxFor(m => m.IsCompleted, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.IsCompleted, new { @class = "form-check-label" })
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>

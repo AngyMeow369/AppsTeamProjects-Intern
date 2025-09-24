@@ -28,15 +28,21 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
-        // Load Create form
+        // -----------------------------
+        // Load Create form in modal
+        // -----------------------------
         $("#btnCreate").click(function () {
             $.get('@Url.Action("Create", "TaskHome")', function (html) {
                 $("#modalContainer").html(html);
+                $("#createTaskModal").modal("show");
             });
         });
 
+        // -----------------------------
         // Search tasks by date
+        // -----------------------------
         $("#btnSearch").click(function () {
             var date = $("#searchDate").val();
             $.get('@Url.Action("Search", "TaskHome")', { date: date }, function (html) {
@@ -44,37 +50,53 @@
             });
         });
 
-        // Edit task button
+        // -----------------------------
+        // Edit task in modal
+        // -----------------------------
         $(document).on("click", ".btn-edit", function () {
             var id = $(this).data("id");
             $.get('@Url.Action("Edit", "TaskHome")', { id: id }, function (html) {
                 $("#modalContainer").html(html);
+                $("#editTaskModal").modal("show");
             });
         });
 
-        // Delete task with simple confirm popup
+        // -----------------------------
+        // Delete task in modal (NOT confirm)
+        // -----------------------------
         $(document).on("click", ".btn-delete", function () {
-            var taskId = $(this).data("id");
-            if (confirm("Are you sure you want to delete this task?")) {
-                var token = $('input[name="__RequestVerificationToken"]').val();
+            var id = $(this).data("id");
+            $.get('@Url.Action("Delete", "TaskHome")', { id: id }, function (html) {
+                $("#modalContainer").html(html);
+                $("#deleteTaskModal").modal("show");
+            });
+        });
 
-                $.ajax({
-                    url: '@Url.Action("Delete", "TaskHome")',
-                    type: 'POST',
-                    data: { id: taskId, __RequestVerificationToken: token },
-                    success: function (res) {
-                        if (res.success) {
-                            $("#taskRow_" + taskId).remove(); // remove the row dynamically
-                            alert("Task deleted successfully!");
-                        } else {
-                            alert("Failed to delete task: " + (res.error || ""));
-                        }
-                    },
-                    error: function () {
-                        alert("Error deleting task.");
+        // -----------------------------
+        // AJAX form submission (Create/Edit/Delete)
+        // -----------------------------
+        $(document).on("submit", "form", function (e) {
+            e.preventDefault();
+            var form = $(this);
+
+            $.ajax({
+                url: form.attr("action"),
+                type: form.attr("method"),
+                data: form.serialize(),
+                success: function (res) {
+                    if (res.success) {
+                        $("#taskList").html(res.html);   // refresh task list
+                        $(".modal").modal("hide");       // close modal
+                    } else {
+                        // if validation failed, re-render modal
+                        $("#modalContainer").html(res);
+                        $(".modal").modal("show");
                     }
-                });
-            }
+                },
+                error: function () {
+                    alert("Something went wrong.");
+                }
+            });
         });
     </script>
 }

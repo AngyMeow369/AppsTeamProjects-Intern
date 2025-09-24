@@ -32,35 +32,6 @@
 </div>
 
 <script>
-   $(document).on("submit", "#deleteTaskForm", function (e) {
-    e.preventDefault();
-    var $form = $(this);
-    var taskId = $form.find('input[name="Id"]').val();
-
-    if (confirm("Are you sure you want to delete this task?")) {
-        $.ajax({
-            url: $form.attr('action'), // this will be /TaskHome/Delete
-            type: 'POST',
-            data: {
-                id: taskId,
-                __RequestVerificationToken: $form.find('input[name="__RequestVerificationToken"]').val()
-            },
-            success: function (res) {
-                if (res.success) {
-                    $("#taskRow_" + taskId).remove(); // remove row
-                    alert("Task deleted successfully!");
-                    $("#modalContainer").empty();    // close modal
-                } else {
-                    alert("Failed to delete task.");
-                }
-            },
-            error: function () {
-                alert("Error deleting task.");
-            }
-        });
-    }
-});
-
 
 </script>
 
