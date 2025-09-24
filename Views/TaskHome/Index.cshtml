@@ -6,54 +6,76 @@
 
 <h2>Task View Manager</h2>
 
+<!-- Anti-forgery token for AJAX posts -->
+@Html.AntiForgeryToken()
+
 <div class="mb-3">
-    @Html.ActionLink("Create New Task", "Create", null, new { @class = "btn btn-success" })
+    <button id="btnCreate" class="btn btn-success">Create New Task</button>
 </div>
 
 <div class="mb-3">
-    @using (Html.BeginForm("Search", "TaskHome", FormMethod.Get))
-    {
-        <div class="input-group">
-            <input type="date" name="date" class="form-control" />
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    }
+    <input type="date" id="searchDate" class="form-control d-inline-block" style="width: 200px;" />
+    <button id="btnSearch" class="btn btn-primary">Search</button>
 </div>
 
-@if (Model != null && Model.Any())
-{
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                @*<th>Id</th>*@
-                <th>Title</th>
-                <th>Description</th>
-                <th>Task Date</th>
-                <th>Hours Logged</th>
-                <th>Completed</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var task in Model)
-            {
-                <tr>
-                    @*<td>@task.Id</td>*@
-                    <td>@task.Title</td>
-                    <td>@task.Description</td>
-                    <td>@task.TaskDate.ToString("yyyy-MM-dd")</td>
-                    <td>@task.HoursLogged</td>
-                    <td>@(task.IsCompleted ? "Yes" : "No")</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = task.Id }, new { @class = "btn btn-sm btn-primary" })
-                        @Html.ActionLink("Delete", "Delete", new { id = task.Id }, new { @class = "btn btn-sm btn-danger" })
-                    </td>
-                </tr>
+<!-- Container for modals or partials -->
+<div id="modalContainer"></div>
+
+<!-- Container for task list -->
+<div id="taskList">
+    @Html.Partial("_SearchTaskPartial", Model)
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Load Create form
+        $("#btnCreate").click(function () {
+            $.get('@Url.Action("Create", "TaskHome")', function (html) {
+                $("#modalContainer").html(html);
+            });
+        });
+
+        // Search tasks by date
+        $("#btnSearch").click(function () {
+            var date = $("#searchDate").val();
+            $.get('@Url.Action("Search", "TaskHome")', { date: date }, function (html) {
+                $("#taskList").html(html);
+            });
+        });
+
+        // Edit task button
+        $(document).on("click", ".btn-edit", function () {
+            var id = $(this).data("id");
+            $.get('@Url.Action("Edit", "TaskHome")', { id: id }, function (html) {
+                $("#modalContainer").html(html);
+            });
+        });
+
+        // Delete task with simple confirm popup
+        $(document).on("click", ".btn-delete", function () {
+            var taskId = $(this).data("id");
+            if (confirm("Are you sure you want to delete this task?")) {
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "TaskHome")',
+                    type: 'POST',
+                    data: { id: taskId, __RequestVerificationToken: token },
+                    success: function (res) {
+                        if (res.success) {
+                            $("#taskRow_" + taskId).remove(); // remove the row dynamically
+                            alert("Task deleted successfully!");
+                        } else {
+                            alert("Failed to delete task: " + (res.error || ""));
+                        }
+                    },
+                    error: function () {
+                        alert("Error deleting task.");
+                    }
+                });
             }
-        </tbody>
-    </table>
+        });
+    </script>
 }
-else
-{
-    <p>No tasks available.</p>
-}
+

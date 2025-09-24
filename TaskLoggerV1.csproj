@@ -184,10 +184,10 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\TaskHome\Index.cshtml" />
-    <Content Include="Views\TaskHome\Create.cshtml" />
-    <Content Include="Views\TaskHome\Edit.cshtml" />
-    <Content Include="Views\TaskHome\Delete.cshtml" />
-    <Content Include="Views\TaskHome\Search.cshtml" />
+    <Content Include="Views\TaskHome\_CreateTaskPartial.cshtml" />
+    <Content Include="Views\TaskHome\_EditTaskPartial.cshtml" />
+    <Content Include="Views\TaskHome\_DeleteTaskPartial.cshtml" />
+    <Content Include="Views\TaskHome\_SearchTaskPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

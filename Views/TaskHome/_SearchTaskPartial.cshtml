@@ -1,20 +1,5 @@
 @model IEnumerable<TaskLoggerV1.Models.TaskModel>
 
-@{
-    ViewBag.Title = "Search Tasks";
-}
-
-<h2>Search Tasks by Date</h2>
-
-@using (Html.BeginForm("Search", "TaskHome", FormMethod.Get))
-{
-    <div class="form-group">
-        <label for="date">Select Date:</label>
-        <input type="date" name="date" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Search</button>
-}
-
 @if (Model != null && Model.Any())
 {
     <table class="table table-bordered table-striped mt-3">
@@ -38,8 +23,8 @@
                     <td>@task.HoursLogged</td>
                     <td>@(task.IsCompleted ? "Yes" : "No")</td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = task.Id }, new { @class = "btn btn-sm btn-primary" })
-                        @Html.ActionLink("Delete", "Delete", new { id = task.Id }, new { @class = "btn btn-sm btn-danger" })
+                        <button class="btn btn-sm btn-primary btn-edit" data-id="@task.Id">Edit</button>
+                        <button class="btn btn-sm btn-danger btn-delete" data-id="@task.Id">Delete</button>
                     </td>
                 </tr>
             }
@@ -50,3 +35,4 @@ else
 {
     <p class="mt-3">No tasks found.</p>
 }
+
